@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
   signal(SIGINT, signal_handler);
   signal(SIGTERM, signal_handler);
 
-  LogProtocol logger;
+  StaticDefaultProtocolHandlerFactory<LogProtocol> logger;
   server = new ServerSocket(&logger);
   server->listen("0.0.0.0", 9292);
 

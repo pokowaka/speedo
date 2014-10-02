@@ -7,7 +7,7 @@
 class LogProtocol : public ProtocolHandler {
   public:
      bool handle(int fd, uint8_t* buffer, ssize_t size) {
-        LINFO  << " fd: " << fd << ", size: " << size;
+        LINFO  << " fd: " << fd << ", size: " << size << ", payload: " << buffer;
         return true;
     }
     

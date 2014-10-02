@@ -1,5 +1,5 @@
 #include "ServerSocket.h"
-#include "../log/easylogging++.h"
+#include "log/easylogging++.h"
 #include <netdb.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -7,7 +7,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-ServerSocket::ServerSocket(ProtocolHandler* handler) :
+ServerSocket::ServerSocket(ProtocolHandlerFactory* handler) :
   m_fd(0), m_protocolHandler(handler) {
     memset(&m_socketAddress, 0, sizeof(sockaddr_in));
 }
@@ -53,9 +53,9 @@ bool ServerSocket::handleErr(int fd, int err) {
   }
   int newFd = 0;
   while( (newFd = accept()) > 0) {
-    m_loop.observe(newFd, m_protocolHandler);
+    m_loop.observe(newFd, m_protocolHandler->getProtocolHandler(newFd));
   }
-  
+
   return true;
 }
 

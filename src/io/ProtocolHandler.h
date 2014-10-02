@@ -12,3 +12,35 @@ class ProtocolHandler {
     // and it is safe to unregister.
     virtual bool handleErr(int fd, int errno) = 0;
 };
+
+
+class ProtocolHandlerFactory {
+  public:
+    virtual ProtocolHandler* getProtocolHandler(int fd) = 0;
+};
+
+template<class T>
+class DefaultProtocolHandlerFactory : public ProtocolHandlerFactory {
+  public:
+    ProtocolHandler* getProtocolHandler(int fd) {
+      return new T();
+    }
+};
+
+template<class T>
+class StaticDefaultProtocolHandlerFactory : public ProtocolHandlerFactory {
+  public:
+    StaticDefaultProtocolHandlerFactory() { 
+      m_protocol = new T();
+    };
+    ~StaticDefaultProtocolHandlerFactory() {
+      delete m_protocol;
+    }
+
+    ProtocolHandler* getProtocolHandler(int fd) {
+      return m_protocol;
+    }
+private:
+    T* m_protocol;
+};
+

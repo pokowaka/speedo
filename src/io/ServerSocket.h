@@ -12,7 +12,7 @@
 
 class ServerSocket : public ProtocolHandler {
   public:
-    explicit ServerSocket(ProtocolHandler* handler);
+    explicit ServerSocket(ProtocolHandlerFactory* handler);
     ~ServerSocket() {}
     bool listen(std::string address, uint16_t port, bool useIpV6 = false);
     void close();
@@ -34,7 +34,7 @@ class ServerSocket : public ProtocolHandler {
 
     int m_fd;
     sockaddr_in m_socketAddress;
-    ProtocolHandler* m_protocolHandler;
+    ProtocolHandlerFactory* m_protocolHandler;
     Eventloop m_loop;
 };
 
