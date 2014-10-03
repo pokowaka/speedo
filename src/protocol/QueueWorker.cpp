@@ -1,6 +1,10 @@
 #include "QueueWorker.h"
 #include "log/easylogging++.h"
 
+QueueWorker::QueueWorker(Queue<Message*> *msg)
+  : m_messageQueue(msg), m_threads(NULL), m_cThreads(0), m_stop(false) {
+  };
+
 void* QueueWorker::worker(void *thisWorker) {
   QueueWorker* pThis = (QueueWorker*) thisWorker;
    while(!pThis->m_stop) {

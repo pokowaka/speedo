@@ -1,7 +1,7 @@
 #pragma once
 class Message {
   public:
-    virtual ~Message() = 0;
+    virtual ~Message() {};
     virtual void execute() = 0;
 
 };
