@@ -28,8 +28,10 @@ class Eventloop {
     void observe(int fd, ProtocolHandler* handler);
   private:
     static void readyReadCallback(EV_P_ ev_io *w, int revents);
+    static void readyAsyncCallback(EV_P_ ev_async *w, int revents);
     bool m_teardown;
 
     struct ev_loop* m_loop;
+    ev_async        m_async;
 };
 

@@ -6,12 +6,22 @@
 #include <stdio.h>
 
 Eventloop::Eventloop() : m_loop(EV_DEFAULT), m_teardown(false) {
-
+  // Setup signal handler so we can safely and immediately exit the loop
+  // if needed. 
+  m_async.data = this;
+  ev_async_init (&m_async, Eventloop::readyAsyncCallback);
+  ev_async_start(m_loop, &m_async);
 }
 
 void Eventloop::unloop() {
   m_teardown = true;
-  ev_break(m_loop, EVBREAK_ALL);
+  ev_async_send(m_loop, &m_async);
+}
+
+void Eventloop::readyAsyncCallback(EV_P_ ev_async *w, int revents) {
+  // Called when it is time to exit the loop.
+  Eventloop *pThis = (Eventloop*) w->data;
+  ev_break(pThis->m_loop, EVBREAK_ALL);
 }
 
 void Eventloop::loop() {

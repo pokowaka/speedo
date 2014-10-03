@@ -8,6 +8,7 @@ class QueueWorker {
 
   public:
     QueueWorker(Queue<Message*> *msg);
+    ~QueueWorker();
     bool init(int cNumThreads);
     void stop();
 
