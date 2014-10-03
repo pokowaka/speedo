@@ -1,58 +1,56 @@
 #pragma once
-// Copyright (c) 2013 Juan Palacios juan.palacios.puyana@gmail.com
-//
-// Subject to the BSD 2-Clause License
-// - see < http://opensource.org/licenses/BSD-2-Clause>
-//
-
 #include <queue>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
+#include <pthread.h>
 
 template <class T>
 class Queue
 {
- public:
+  public:
 
-  T pop() 
-  {
-    std::unique_lock<std::mutex> mlock(m_mutex);
-    while (m_queue.empty())
-    {
-      m_cond.wait(mlock);
+    Queue() {
+      pthread_mutex_init(&m_lock, NULL);
+      pthread_cond_init(&m_cond, NULL);
     }
-    T val = m_queue.front();
-    m_queue.pop();
-    return val;
-  }
 
-  bool const empty() {
-    return m_queue.empty();
-  }
-
-  void pop(T& item)
-  {
-    std::unique_lock<std::mutex> mlock(m_mutex);
-    while (m_queue.empty())
-    {
-      m_cond.wait(mlock);
+    ~Queue() {
+      pthread_mutex_destroy(&m_lock);
+      pthread_cond_destroy(&m_cond);
     }
-    item = m_queue.front();
-    m_queue.pop();
-  }
 
-  void push(const T& item)
-  {
-    std::unique_lock<std::mutex> mlock(m_mutex);
-    m_queue.push(item);
-    mlock.unlock();
-    m_cond.notify_one();
-  }
-  Queue() { };
-  
- private:
-  std::queue<T> m_queue;
-  std::mutex m_mutex;
-  std::condition_variable m_cond;
+    T pop() {
+      pthread_mutex_lock(&m_lock);
+      while (m_queue.empty()) {
+        pthread_cond_wait(&m_cond, &m_lock);
+      }
+      T val = m_queue.front();
+      m_queue.pop();
+      pthread_mutex_unlock(&m_lock);
+      return val;
+    }
+
+    bool const empty() {
+      return m_queue.empty();
+    }
+
+    void pop(T& item) {
+      pthread_mutex_lock(&m_lock);
+      while (m_queue.empty()) {
+        pthread_cond_wait(&m_cond, &m_lock);
+      }
+      item = m_queue.front();
+      m_queue.pop();
+      pthread_mutex_unlock(&m_lock);
+    }
+
+    void push(const T& item) {
+      pthread_mutex_lock(&m_lock);
+      m_queue.push(item);
+      pthread_cond_signal(&m_cond);
+      pthread_mutex_unlock(&m_lock);
+    }
+
+  private:
+    std::queue<T>   m_queue;
+    pthread_cond_t  m_cond;
+    pthread_mutex_t m_lock;
 };

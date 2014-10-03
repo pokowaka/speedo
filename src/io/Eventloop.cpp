@@ -15,6 +15,23 @@ void Eventloop::unloop() {
 }
 
 void Eventloop::loop() {
+
+  int backend = ev_backend(m_loop);
+  std::string str;
+  switch (backend) {
+    case EVBACKEND_SELECT :  str = "EVBACKEND_SELECT"; break;
+    case EVBACKEND_POLL   :  str = "EVBACKEND_POLL  "; break;
+    case EVBACKEND_EPOLL  :  str = "EVBACKEND_EPOLL "; break;
+    case EVBACKEND_KQUEUE :  str = "EVBACKEND_KQUEUE"; break;
+    case EVBACKEND_DEVPOLL:  str = "EVBACKEND_DEVPOL"; break;
+    case EVBACKEND_PORT   :  str = "EVBACKEND_PORT  "; break;
+    case EVBACKEND_ALL    :  str = "EVBACKEND_ALL   "; break;
+    case EVBACKEND_MASK   :  str = "EVBACKEND_MASK  "; break;
+    default: str = "Unknown backend"; break;
+  };
+
+  LINFO << "loop using backend: " << str;
+
   while(!m_teardown) {
     LTRACE << "ev_run";
     ev_run(m_loop, 0);

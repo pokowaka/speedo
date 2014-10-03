@@ -11,6 +11,36 @@ We have an I/O thread that does:
 We have a set of worker threads that pop messages of the queue and executes them.
 
 
+Installing
+==========
+
+You will need to install the following dependencies:
+
+* libev
+* cmake
+
+On linux:
+
+`sudo apt-get install libev-dev cmake`
+
+On mac, use homebrew:
+
+`brew install cmake libev`
+
+Next you can do something like this:
+
+```
+mkdir build
+cd build
+cmake ..
+./src/speedo
+```
+
+Next you can ```telnet localhost 9292``` and just type some things. You should see it 
+echo back what you typed after pressing enter.
+
+
+
 Adding my own protocol
 ----------------------
 
@@ -27,6 +57,11 @@ You basically need to implement the following things:
 
 FAQ
 ---
+
+* Why can't I open a huge number of connections on my Mac?
+
+LibEv defaults to select on your mac. Select is restricted on a Mac, it is also to type of backed that gives poor performance. See [link](http://daniel.haxx.se/docs/poll-vs-select.html) for more info on this.
+
 
 * Why is there only one I/O thread?
 

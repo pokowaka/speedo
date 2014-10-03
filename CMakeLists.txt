@@ -2,7 +2,7 @@
 # refer to the root source directory of the project as ${HELLO_SOURCE_DIR} and 
 # to the root binary directory of the project as ${HELLO_BINARY_DIR}. 
 CMAKE_MINIMUM_REQUIRED (VERSION 2.8) 
-PROJECT (PROCTOR) 
+PROJECT (SPEEDO) 
 
 SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 SET(PACKAGE_VERSION 2.0.0)
