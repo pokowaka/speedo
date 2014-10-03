@@ -16,7 +16,7 @@ LINK_LIBRARIES (ev)
 
 # LINK_DIRECTORIES (${SPEEDO_BINARY_DIR}/src/io) 
 
-ADD_EXECUTABLE (speedo Main.cpp)
+ADD_EXECUTABLE (speedo main.cpp)
 
 
 TARGET_LINK_LIBRARIES (speedo io ev protocol ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
