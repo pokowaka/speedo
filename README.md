@@ -7,7 +7,7 @@ Speedo is a very simple example of an eventloop driven server. The architecture 
 We have an I/O thread that does:
 
  IO Layer (produces bytes) --> Protocol Layer (produces "messages") --> Message Queue
- 
+
 We have a set of worker threads that pop messages of the queue and executes them.
 
 
@@ -33,10 +33,11 @@ Next you can do something like this:
 mkdir build
 cd build
 cmake ..
+make
 ./src/speedo
 ```
 
-Next you can ```telnet localhost 9292``` and just type some things. You should see it 
+Next you can ```telnet localhost 9292``` and just type some things. You should see it
 echo back what you typed after pressing enter.
 
 
