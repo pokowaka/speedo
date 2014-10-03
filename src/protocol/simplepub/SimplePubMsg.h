@@ -1,5 +1,8 @@
 #pragma once
 #include <assert.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <netinet/in.h>
 #include "protocol/Message.h"
 
 class SimplePubMsg : public Message {
